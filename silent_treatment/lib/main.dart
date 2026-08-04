@@ -12,7 +12,6 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Silent Treatment',
       theme: ThemeData(
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
@@ -21,7 +20,7 @@ class App extends StatelessWidget {
       home: const LoginPage(title: 'Login',),
     );
   }
-}
+} 
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -39,6 +38,7 @@ class _HomePageState extends State<HomePage> {
       body: 
         Center(
         child: Text('Unfinished - Plan UI first'),
+
       )
     );
   }

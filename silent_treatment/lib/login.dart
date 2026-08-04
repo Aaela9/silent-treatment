@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+// widgets
 import 'package:silent_treatment/widgets/rounded_button.dart';
+import 'package:silent_treatment/widgets/rounded_text_form_field.dart';
+
+// pages
 import 'package:silent_treatment/main.dart';
 
 void main() {
@@ -30,30 +34,57 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
       body: Center(
         child: Padding( 
           padding: EdgeInsets.all(10.0),
-          child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * 0.1,
-                  child: RoundedCircularButton(
-                    text: 'Login', 
-                    onPressed: () {Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomePage(title: 'Silent Treatment',)),
-                  );
-                                },
-                              ),
-                ), 
+          child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                child:
+                  Column(
+                    children: [
+                      // email field
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: RoundedTextFormField(
+                          obscureText: false,
+                          prefixIcon: Icons.email_outlined,
+                          suffixIcon: null,
+                          hintText: "Email Address",
+                          ),
+                        ),
+                      // password field
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: RoundedTextFormField(
+                            obscureText: true,
+                            prefixIcon: Icons.password_outlined,
+                            suffixIcon: null,
+                            hintText: "Password",
+                            ),
+                        ),
+                      const Spacer(),
+                      // login button
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          child: RoundedCircularButton(
+                            text: 'Login', 
+                            onPressed: () {Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const HomePage(title: 'Silent Treatment',)),
+                        );
+                      },
+                    ),
+                  ), 
+                ),
+              ]
+            ),
           ),
         ),
-      ),
+      )
     );
   }
 }
