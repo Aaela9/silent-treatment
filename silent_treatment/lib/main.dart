@@ -15,9 +15,9 @@ class App extends StatelessWidget {
       theme: ThemeData(
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        scaffoldBackgroundColor: Color.fromRGBO(78, 110, 158, 1),
       ),
-      home: const LoginPage(title: 'Login',),
+      home: const LoginPage(),
     );
   }
 } 
@@ -37,7 +37,19 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: 
         Center(
-        child: Text('Unfinished - Plan UI first'),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: .start,
+              children: [
+                BackButton(
+                  color: Colors.white,
+                )
+              ],
+            ),    
+            Text('Unfinished - Plan UI first'),
+          ],
+        ),
 
       )
     );

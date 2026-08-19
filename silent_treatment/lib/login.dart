@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 // widgets
 import 'package:silent_treatment/widgets/rounded_button.dart';
 import 'package:silent_treatment/widgets/rounded_text_form_field.dart';
 
 // pages
 import 'package:silent_treatment/main.dart';
-
-void main() {
-  runApp(const App());
-}
+import 'package:silent_treatment/signup.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key, required this.title});
+  const LoginPage({super.key});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -22,13 +21,30 @@ class LoginPage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
-
   @override
-  State<LoginPage> createState() => LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> {
+final storage = FlutterSecureStorage();
+bool rememberMe = false;
+
+Future<void> login(dynamic _emailController, dynamic _passwordController) async {
+
+  String email = _emailController.text.trim();
+  String password = _passwordController.text;
+
+  await storage.write(key: 'username', value: 'flutter_user');
+  if (mounted) {
+  Navigator.pushReplacement(context,
+    MaterialPageRoute(
+      builder: (context) => const HomePage(
+        title: 'Silent Treatment',
+        )
+      ),
+    );
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -36,55 +52,121 @@ class LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Center(
         child: Padding( 
-          padding: EdgeInsets.all(10.0),
-          child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                child:
-                  Column(
-                    children: [
-                      // email field
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: RoundedTextFormField(
-                          obscureText: false,
-                          prefixIcon: Icons.email_outlined,
-                          suffixIcon: null,
-                          hintText: "Email Address",
-                          ),
-                        ),
-                      // password field
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: RoundedTextFormField(
-                            obscureText: true,
-                            prefixIcon: Icons.password_outlined,
-                            suffixIcon: null,
-                            hintText: "Password",
-                            ),
-                        ),
-                      const Spacer(),
-                      // login button
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.1,
-                          child: RoundedCircularButton(
-                            text: 'Login', 
-                            onPressed: () {Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const HomePage(title: 'Silent Treatment',)),
-                        );
-                      },
-                    ),
-                  ), 
-                ),
-              ]
-            ),
+          padding: EdgeInsets.all(30),
+          child: Column(
+            mainAxisAlignment: .spaceBetween,
+            children: [
+              topButtons(),
+              bottomButtons(),
+            ]
           ),
         ),
+      ),
+    );
+  }
+
+  Widget topButtons() {
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.40,
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        mainAxisAlignment: .start,
+        crossAxisAlignment: .center,
+        children: [
+          // email field
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12.0, top: 12.0),
+            child: RoundedTextFormField(
+              obscureText: false,
+              prefixIcon: Icons.email_outlined,
+              suffixIcon: null,
+              hintText: "Email Address",
+              controller: _emailController,
+              ),
+            ),
+                // password field
+            RoundedTextFormField(
+                obscureText: true,
+                prefixIcon: Icons.password_outlined,
+                suffixIcon: null,
+                hintText: "Password",
+                controller: _passwordController,
+              ),
+            CheckboxListTile(
+              value: false, 
+              onChanged: (bool? value) { // bool tri-state, value can be true, false, or null
+                setState(() {
+                  rememberMe = value ?? false; // if null, use false
+                }
+              );
+            },
+          ),
+        ]
       )
+    );
+  }
+  Widget bottomButtons() {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 16.0),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height * 0.1,
+            child: RoundedCircularButton(
+              text: 'LOGIN', 
+              onPressed: () {Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomePage(
+                    title: 'Silent Treatment',
+                    )
+                  ),
+                );
+              },
+            ),
+          ), 
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 6),
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: .end,
+              children: [
+                Text("Don't have an account?",
+                  style: TextStyle(
+                    color: Color.fromRGBO(255, 255, 255, 0.6),
+                    fontSize: 11.0,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(
+                        builder: (context) => const SignupPage()
+                        )
+                      );
+                    },
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero
+                  ),
+                  child:
+                  Text("Sign up",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 13.0,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        )
+      ]
     );
   }
 }
@@ -99,3 +181,7 @@ class LoginPageState extends State<LoginPage> {
 // password
 
 // sign up page
+
+
+
+// i just try to make it look good for now

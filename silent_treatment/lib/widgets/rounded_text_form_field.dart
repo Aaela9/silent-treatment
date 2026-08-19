@@ -14,58 +14,47 @@ class RoundedTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.65,
-      decoration: const BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-       color: Color.fromRGBO(
-          67, 
-          71, 
-          77, 
-          0.38
-          ),
-          spreadRadius: 2,
-          blurRadius: 12,
-          offset: Offset(0, 7),
-          ),
-        ],
-      ),
-      child: Center(
-        child: Container(
+    return Padding(
+      padding: const EdgeInsets.only(top:8.0, bottom: 8.0),
+      child: Container(
+          width: MediaQuery.of(context).size.width,
           decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(
-              Radius.circular(100),
-              ),
-            ),
-          child: TextFormField(
-            onChanged: onChanged,
-            controller: controller,
-            obscureText: obscureText,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                prefixIcon,
-                color: Colors.blue,
+          ),
+          child: Center(
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Color.fromRGBO(99, 134, 188, 1),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(100),
+                  ),
                 ),
-              suffixIcon: suffixIcon,
-                border: const OutlineInputBorder(
-                  borderSide: BorderSide.none
+              child: TextFormField(
+                style: TextStyle(
+                  color: Colors.white
                 ),
-                hintText: hintText,
-                hintStyle: TextStyle(
-                  fontSize: 10,
-                  color: 	Color.fromRGBO(
-                    131, 
-                    143, 
-                    160, 
-                    100
+                cursorColor: Colors.white, 
+                onChanged: onChanged,
+                controller: controller,
+                obscureText: obscureText,
+                decoration: InputDecoration(
+                  prefixIcon: Icon(
+                    prefixIcon,
+                    color: Color.fromRGBO(255, 255, 255, 0.75),
+                    ),
+                  suffixIcon: suffixIcon,
+                    border: const OutlineInputBorder(
+                      borderSide: BorderSide.none
+                    ),
+                    hintText: hintText,
+                    hintStyle: TextStyle(
+                      fontSize: 12,
+                      color: 	Color.fromRGBO(253, 253, 253, 0.75),
                     ),
                 ),
+              ),
             ),
           ),
         ),
-      ),
     );
   }
 }
