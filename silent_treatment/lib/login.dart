@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 // widgets
 import 'package:silent_treatment/widgets/rounded_button.dart';
@@ -26,14 +27,43 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+final TextEditingController _emailController = TextEditingController();
+final TextEditingController _passwordController = TextEditingController();
+
 final storage = FlutterSecureStorage();
 bool rememberMe = false;
 
-Future<void> login(dynamic _emailController, dynamic _passwordController) async {
+@override
+void dispose() {
+  _emailController.dispose();
+  _passwordController.dispose();
+  super.dispose();
+}
 
+Future<void> login(dynamic _emailController, dynamic _passwordController) async {
   String email = _emailController.text.trim();
   String password = _passwordController.text;
 
+  // authentication logic here (e.g., API call, validation, etc.)
+  try {
+    response = await Supabase.instance.client.auth.signInWithPassword(
+      email: email,
+      password: password,
+    );
+  
+  if (response.user != null && mounted) {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomePage(title: 'Silent Treatment')),
+      );
+    }
+  } catch (error) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Authentication Failed: ${error.toString()}")),
+      );
+    }
+  }
+  
   await storage.write(key: 'username', value: 'flutter_user');
   if (mounted) {
   Navigator.pushReplacement(context,
@@ -92,8 +122,17 @@ Future<void> login(dynamic _emailController, dynamic _passwordController) async 
                 hintText: "Password",
                 controller: _passwordController,
               ),
-            CheckboxListTile(
-              value: false, 
+            Row(
+              mainAxisAlignment: .end,
+              children: [
+                Text(
+                  style: TextStyle(color: Colors.white60),
+                  "Remember me"
+                ),
+            Checkbox(
+              value: rememberMe,
+              activeColor: Colors.white60,
+              side: const BorderSide(color: Colors.white60),
               onChanged: (bool? value) { // bool tri-state, value can be true, false, or null
                 setState(() {
                   rememberMe = value ?? false; // if null, use false
@@ -101,6 +140,8 @@ Future<void> login(dynamic _emailController, dynamic _passwordController) async 
               );
             },
           ),
+          ]
+        ),
         ]
       )
     );
@@ -115,14 +156,8 @@ Future<void> login(dynamic _emailController, dynamic _passwordController) async 
             height: MediaQuery.of(context).size.height * 0.1,
             child: RoundedCircularButton(
               text: 'LOGIN', 
-              onPressed: () {Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomePage(
-                    title: 'Silent Treatment',
-                    )
-                  ),
-                );
+              onPressed: () {
+                login();
               },
             ),
           ), 

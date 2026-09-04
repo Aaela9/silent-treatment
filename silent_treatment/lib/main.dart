@@ -67,3 +67,8 @@ class _HomePageState extends State<HomePage> {
 // person A can then address them the same way until resolved
 
 // Also should have a "spit" feature, where it's just complaints but no desired solution
+// battery level
+// shared calendar with import/export
+// notifications
+// settings
+// user profile
