@@ -1,2 +1,2 @@
 # silent-treatment
-An app developed for passive communication.
+An app being developed for passive communication.
